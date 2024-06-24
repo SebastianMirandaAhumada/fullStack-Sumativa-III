@@ -1,0 +1,22 @@
+<main class="container mt-5">
+  <h1>Mi Tienda de Juegos</h1>
+  <article class="row my-5 justify-content-center">
+    <section
+      *ngFor="let item of data"
+      class="card col-md-3 me-4 mt-4"
+      style="width: 18rem"
+    >
+      <img [src]="item.img" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h4 class="card-title" id="mario">{{ item.title }}</h4>
+        <h6 class="card-subtitle" id="mario">Precio: ${{ item.precio }}</h6>
+        <p class="card-text">
+          {{ item.description }}
+        </p>
+        <button (click)="addToCart(item)" class="btn btn-outline-primary">
+          Comprar
+        </button>
+      </div>
+    </section>
+  </article>
+</main>

@@ -1,0 +1,81 @@
+<header class="header_index">
+  <nav class="navbar navbar-expand-lg bg-black sticky-top text-white">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="./index.html">Tienda Juegos</a>
+      <span *ngIf="isAuthenticated">Hola!, {{ name }}</span>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse text-white" id="navbarScroll">
+        <ul
+          class="navbar-nav m-auto my-2 my-lg-0 navbar-nav-scroll"
+          style="--bs-scroll-height: 100px"
+        >
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="./index.html"
+              >Inicio</a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="['/login']"
+              *ngIf="!isAuthenticated"
+              >Inicio Sesion</a
+            >
+          </li>
+
+          <li class="nav-item" id="profileLink">
+            <a class="nav-link" [routerLink]="['/user']" *ngIf="isAuthenticated"
+              >Mi Cuenta</a
+            >
+          </li>
+          <li class="nav-item" id="profileLink">
+            <a
+              class="nav-link"
+              [routerLink]="['/admin']"
+              *ngIf="isAuthenticated"
+              >Administrador</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="['/registro']"
+              *ngIf="!isAuthenticated"
+              >Registro</a
+            >
+          </li>
+        </ul>
+ 
+
+        <a class="nav-link" [routerLink]="['/juegos']">Mi Carrito</a>
+      </div>
+    </div>
+  </nav>
+  <article class="header_container">
+    <section class="title_section">
+      <h1>The Last of Us</h1>
+      <p>
+        The Las of Us es un juego de accion aventura, horror y supervivencia
+        este juego ha sido creado por Naughty Dog y Sony Interactive
+        Entertainment.
+      </p>
+    </section>
+    <section class="button_section">
+      <button type="button" class="btn btn-light btn-lg">Comprar Ahora</button>
+      <button type="button" class="btn btn-outline-primary btn-lg">
+        Probar demo
+      </button>
+    </section>
+  </article>
+</header>

@@ -1,0 +1,87 @@
+<div class="w-100 text-center my-5">
+  <h1>Perfil Administrador</h1>
+
+</div>
+<ul class="list-group" *ngFor="let item of data">
+  <li class="list-group-item">
+    {{ item.name }}
+    <div class="d-flex justify-content-end w-100">
+      <button type="button" class="btn btn-success me-3" (click)="getform(item.name)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Editar
+      </button>
+      <button type="button" class="btn btn-danger" (click)="borrar(item.name)">Eliminar</button>
+    </div>
+  </li>
+</ul>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 font-bold" id="staticBackdropLabel">Editar Usuario</h1>
+        <hr>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="registerForm"  (ngSubmit)="submit()"  [formGroup]="form"> 
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" formControlName="name" />
+            <div id="nombreCompletoHelp" class="form-text text-danger"></div>
+            <div *ngIf="f.name.errors?.['minlength']" class="form-text text-danger">
+             Debe tener mas de de 2 letras
+            </div>
+        
+          </div>
+      
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Telefono</label>
+            <input type="text" class="form-control" formControlName="phone" />
+            <div *ngIf="f.phone.errors?.['minlength']" class="form-text text-danger">
+              El numero debe tener mas de 5 digitos
+             </div>
+          </div>
+      
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" formControlName="email" />
+            <div *ngIf="f['email'].touched && f['email'].invalid"  class="form-text text-danger">Email Invalido</div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              formControlName="pass"
+              id="contraseña"
+            />
+            <div id="passwordHelp" class="form-text text-danger"></div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Confirmar Contraseña</label
+            >
+            <input
+              type="password"
+              formControlName="passconfirm"
+              class="form-control"
+              id="confirmarContraseña"
+            />
+            <div
+              class="error-message"
+              *ngIf="form?.errors?.['mismatch'] && form?.touched"
+              class="form-text text-danger"
+            >
+              Las contraseñas no coinciden
+            </div>
+          </div>
+          <button type="submit"  data-bs-dismiss="modal" class="btn btn-primary">
+            Editar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
