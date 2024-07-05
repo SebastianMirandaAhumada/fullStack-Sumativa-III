@@ -8,35 +8,24 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { LocalStorageService } from '../../../service/localStorage.service';
 import { Router } from '@angular/router';
 
-/**
- * @description
- * Componente para manejar el formulario de registro de usuarios.
- */
+import { ConsumirBD } from '../service/consumir-bd.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   imports: [NgIf, FormsModule, ReactiveFormsModule],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.scss',
+  styleUrls: ['./registro.component.scss'],
 })
 export class RegistroComponent {
-  /**
-   * @constructor
-   * @param {LocalStorageService} localStorageService - Servicio para manejar el almacenamiento en localStorage.
-   * @param {Router} router - Servicio de Angular para la navegación.
-   */
   constructor(
-    private localStorageService: LocalStorageService,
-    private router: Router
+
+    private router: Router,
+    private _auth: ConsumirBD
   ) {}
-  /**
-   * @description
-   * FormGroup para manejar los controles del formulario de registro.
-   */
+
   form = new FormGroup(
     {
       name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -56,39 +45,30 @@ export class RegistroComponent {
       validators: this.passwordMatchValidator,
     }
   );
-  /**
-   * @description
-   * Getter para obtener los controles del formulario.
-   * @returns {FormGroup['controls']} Los controles del formulario.
-   */
+
   get f() {
     return this.form.controls;
   }
 
-  /**
-   * @description
-   * Validador para comprobar que las contraseñas coincidan.
-   * @param {AbstractControl} control - El grupo de controles que contiene las contraseñas.
-   * @returns {ValidationErrors | null} Un objeto de errores de validación si las contraseñas no coinciden, de lo contrario null.
-   */
   passwordMatchValidator(control: AbstractControl) {
     return control.get('pass')?.value === control.get('passconfirm')?.value
       ? null
-      : {
-          mismatch: true,
-        };
+      : { mismatch: true };
   }
-  /**
-   * @description
-   * Maneja el envío del formulario. Alerta al usuario y redirige a la página de inicio de sesión.
-   */
+
   submit() {
-    window.alert(
-      `Hola ${this.form.value.name}, te has registrado correctamente!`
-    );
-    this.router.navigate(['/', 'login']).then(() => {
-      window.location.reload();
-    });
-    this.localStorageService.addItem('form', this.form.value);
+    window.alert(`Hola ${this.form.value.name}, te has registrado correctamente!`);
+
+    this._auth.register(this.form.value.email, this.form.value.pass)
+      .then(result => {        
+        this.router.navigate(['/', 'login']).then(() => {
+          window.location.reload();
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    // this.localStorageService.addItem('form', this.form.value);
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DataJuegosInteface } from '../interfaces';
 import { CartService } from '../cart.service';
 import { NgFor } from '@angular/common';
+import { ConsumirBD } from '../service/consumir-bd.service';
 
 /**
  * @description
@@ -22,7 +23,7 @@ export class JuegosComponent {
   items: DataJuegosInteface[] = [];
   precio: number = 0;
 
-  constructor() {}
+  constructor(public service: ConsumirBD) {}
 
   /**
    * @description Método que se ejecuta al inicializar el componente.
@@ -39,8 +40,6 @@ export class JuegosComponent {
         this.precio += e.precio;
       });
     } else {
-      
-     
     }
   }
 
@@ -62,4 +61,5 @@ export class JuegosComponent {
     window.alert(`Usuario ${name}, Eliminado correctamente!`);
     window.location.reload();
   }
+
 }

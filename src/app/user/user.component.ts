@@ -10,6 +10,7 @@ import {
 import { LocalStorageService } from '../../../service/localStorage.service';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { ConsumirBD } from '../service/consumir-bd.service';
 
 /**
  * @description
@@ -33,7 +34,8 @@ export class UserComponent {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private auth: ConsumirBD
   ) {
     this.getform();
   }
@@ -117,9 +119,9 @@ export class UserComponent {
    * Cierra la sesión del usuario, eliminando el token de autenticación y redirigiendo a la página principal.
    */
   cerrarSesion() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/', 'home']).then(() => {
-      window.location.reload();
-    });
+    this.auth
+      .logout()
+      .then((e) => console.log(e))
+      .catch((e) => console.log(e));
   }
 }

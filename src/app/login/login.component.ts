@@ -9,6 +9,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataUsuariosInteface } from '../interfaces';
 import { Router } from '@angular/router';
+import { ConsumirBD } from '../service/consumir-bd.service';
 
 /**
  * @description
@@ -27,7 +28,7 @@ export class LoginComponent {
    * @constructor
    * @param {Router} router - Servicio de Angular para la navegación.
    */
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: ConsumirBD) {}
   /**
    * @description
    * FormGroup para manejar los controles del formulario de inicio de sesión.
@@ -54,17 +55,14 @@ export class LoginComponent {
    * Maneja el envío del formulario. Verifica las credenciales y redirige al usuario a la página principal si son correctas.
    */
   submit() {
-    const user = localStorage.getItem('form');
-    const form: DataUsuariosInteface = user ? JSON.parse(user) : null;
-    console.log(form)
-    if (
-      form.email == this.form.value.email &&
-      form.pass == this.form.value.pass
-    ) {
-      localStorage.setItem('token', 'aaaaa');
-      this.router.navigate(['/', 'home']).then(() => {
-        window.location.reload();
-      });
-    }
+    this.auth
+      .login(this.form.value.email, this.form.value.pass)
+      .then((e) =>
+        this.router.navigate(['/', 'home']).then(() => {
+          window.location.reload();
+        })
+      )
+      .catch((e) => console.log(e));
+
   }
 }
