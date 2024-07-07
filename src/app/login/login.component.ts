@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DataUsuariosInteface } from '../interfaces';
 import { Router } from '@angular/router';
 import { ConsumirBD } from '../service/consumir-bd.service';
+import { HttpServiceService } from '../service/http-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 /**
  * @description
@@ -19,16 +21,25 @@ import { ConsumirBD } from '../service/consumir-bd.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, FormsModule],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+  ],
+  providers: [HttpServiceService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  usuario: DataUsuariosInteface[];
+
   /**
    * @constructor
    * @param {Router} router - Servicio de Angular para la navegación.
    */
-  constructor(private router: Router, private auth: ConsumirBD) {}
+  constructor(private router: Router, private auth: HttpServiceService) {}
   /**
    * @description
    * FormGroup para manejar los controles del formulario de inicio de sesión.
@@ -41,6 +52,14 @@ export class LoginComponent {
     ]),
     pass: new FormControl('', [Validators.required]),
   });
+  ngOnInit() {
+    this.auth.obterLogin().subscribe({
+      next: (e) => {
+        this.usuario = e;
+      },
+    });
+  }
+
   /**
    * @description
    * Getter para obtener los controles del formulario.
@@ -55,14 +74,15 @@ export class LoginComponent {
    * Maneja el envío del formulario. Verifica las credenciales y redirige al usuario a la página principal si son correctas.
    */
   submit() {
-    this.auth
-      .login(this.form.value.email, this.form.value.pass)
-      .then((e) =>
-        this.router.navigate(['/', 'home']).then(() => {
-          window.location.reload();
-        })
-      )
-      .catch((e) => console.log(e));
-
+    const usuarioPass = this.usuario.find(
+      (u) => u.pass == this.form.value.pass
+    );
+    if (usuarioPass.pass == this.form.value.pass) {
+      const usuario =JSON.stringify(usuarioPass)
+      localStorage.setItem('token', 'aaaaa');
+      localStorage.setItem('usuario', usuario);
+      this.router.navigate(['/home']);
+      window.location.reload()
+    }
   }
 }

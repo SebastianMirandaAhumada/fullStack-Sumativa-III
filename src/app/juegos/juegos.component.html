@@ -10,7 +10,7 @@
           <p class="card-text">{{ item.title }}</p>
           <h6 class="card-subtitle" id="mario">Precio - ${{ item.precio }}</h6>
           
-          <button (click)="borrar(item.title)" class="btn btn-outline-danger">
+          <button (click)="borrar(item)" class="btn btn-outline-danger">
             Eliminar
           </button>
         </div>
@@ -24,23 +24,4 @@
       </button>
     </section>
   </article>
-
-  <!-- 
-
-  <article class="row">
-    <section
-      *ngFor="let item of items"
-      class="card col-md-3 me-4 mt-4"
-      style="width: 18rem"
-    >
-      <img [src]="item.img" class="card-img-top" alt="..." />
-      <div class="card-body">
-        <h4 class="card-title" id="mario">{{ item.title }}</h4>
-        <p class="card-text">
-          {{ item.description }}
-        </p>
-      </div>
-    </section>
-  </article>
-</main> -->
 </main>

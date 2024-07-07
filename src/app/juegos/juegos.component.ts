@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { DataJuegosInteface } from '../interfaces';
 import { CartService } from '../cart.service';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { ConsumirBD } from '../service/consumir-bd.service';
+import { HttpServiceService } from '../service/http-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 /**
  * @description
@@ -15,7 +17,8 @@ import { ConsumirBD } from '../service/consumir-bd.service';
 @Component({
   selector: 'app-juegos',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, HttpClientModule, CommonModule],
+  providers: [HttpServiceService],
   templateUrl: './juegos.component.html',
   styleUrl: './juegos.component.scss',
 })
@@ -23,7 +26,7 @@ export class JuegosComponent {
   items: DataJuegosInteface[] = [];
   precio: number = 0;
 
-  constructor(public service: ConsumirBD) {}
+  constructor(public service: HttpServiceService) {}
 
   /**
    * @description Método que se ejecuta al inicializar el componente.
@@ -33,14 +36,17 @@ export class JuegosComponent {
    */
 
   ngOnInit(): void {
-    const item = localStorage.getItem('carrito');
-    this.items = item ? JSON.parse(item) : null;
-    if (item && this.items) {
-      this.items.forEach((e) => {
-        this.precio += e.precio;
-      });
-    } else {
-    }
+    this.service.getCarrito().subscribe({
+      next: (e) => {
+        console.log(e);
+        this.items = e;
+        if (e && this.items) {
+          this.items.forEach((x) => {
+            this.precio += x.precio;
+          });
+        }
+      },
+    });
   }
 
   /**
@@ -52,14 +58,12 @@ export class JuegosComponent {
    * precio total menors
    */
 
-  borrar(name: string) {
-    this.items = this.items.filter((user) => user.title !== name);
-    this.items.forEach((e) => {
-      this.precio += e.precio;
+  borrar(product: DataJuegosInteface) {
+    this.service.DeleteCarrito(product).subscribe({
+      next: (e) => {
+        window.alert(`Usuario ${product.title}, Eliminado correctamente!`);
+        window.location.reload();
+      },
     });
-    localStorage.setItem('carrito', JSON.stringify(this.items));
-    window.alert(`Usuario ${name}, Eliminado correctamente!`);
-    window.location.reload();
   }
-
 }

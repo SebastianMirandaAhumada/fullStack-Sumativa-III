@@ -39,10 +39,10 @@ export class NavBarComponent implements OnInit {
    */
 
   ngOnInit() {
-    console.log(this.data)
     const token = localStorage.getItem('token');
     this.isAuthenticated = !!token;
-    this.mostrarUser();
+    console.log(this.isAuthenticated)
+    // this.mostrarUser();
   }
 
   /**

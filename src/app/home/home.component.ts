@@ -7,6 +7,7 @@ import { dataJuego } from '../../dataJuego';
 import { LocalStorageService } from '../../../service/localStorage.service';
 import { ConsumirBD } from '../service/consumir-bd.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpServiceService } from '../service/http-service.service';
 
 /**
  * @description
@@ -20,12 +21,12 @@ import { HttpClientModule } from '@angular/common/http';
   selector: 'app-home',
   standalone: true,
   imports: [NgFor, HttpClientModule, CommonModule],
-  providers: [ConsumirBD],
+  providers: [HttpServiceService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  public data: DataJuegosInteface[] = dataJuego;
+  public data: DataJuegosInteface[];
 
   private items: DataJuegosInteface[] = [];
   /**
@@ -33,10 +34,8 @@ export class HomeComponent implements OnInit {
    * @param {LocalStorageService} localStorageService - Servicio para manejar el almacenamiento en localStorage.
    */
   constructor(
-    private localStorageService: LocalStorageService,
-    private service: ConsumirBD
-  ) {
-  }
+    private service: HttpServiceService
+  ) {}
   /**
    * Borrar Usuario
    * @param {DataJuegosInteface} product - un objeto que sigue la interfaz DataJuegosInteface,
@@ -44,8 +43,7 @@ export class HomeComponent implements OnInit {
    * y lo guarda dentro del arreglo this.item, para que despues este lo guarde en el localStorage
    */
   addToCart(product: DataJuegosInteface) {
-    this.items.push(product);
-    this.localStorageService.addItem('carrito', this.getItems());
+  this.service.postCarrito(product).subscribe(e=>console.log(e));
     window.alert('Producto añadido al carrito!');
   }
   /**
@@ -56,19 +54,18 @@ export class HomeComponent implements OnInit {
   getItems() {
     return this.items;
   }
-  ngOnInit(){
+  ngOnInit() {
     this.mostrarJuegos();
-
   }
 
   mostrarJuegos() {
-    // this.service.getJuegos().subscribe({
-    //   next: (e) => {
-    //     console.log(e);
-    //   },
-    //   error: (e) => {
-    //     console.log(e);
-    //   },
-    // });
+    this.service.getJuegos().subscribe({
+      next: (e) => {
+        this.data = e;
+      },
+      error: (e) => {
+        console.log(e);
+      },
+    });
   }
 }

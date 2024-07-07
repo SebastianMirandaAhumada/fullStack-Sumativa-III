@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   AbstractControl,
@@ -11,20 +11,25 @@ import {
 import { Router } from '@angular/router';
 
 import { ConsumirBD } from '../service/consumir-bd.service';
+import { HttpServiceService } from '../service/http-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [NgIf, FormsModule, ReactiveFormsModule],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    CommonModule,
+  ],
+  providers: [HttpServiceService],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.scss'],
 })
 export class RegistroComponent {
-  constructor(
-
-    private router: Router,
-    private _auth: ConsumirBD
-  ) {}
+  constructor(private router: Router, private service: HttpServiceService) {}
 
   form = new FormGroup(
     {
@@ -57,18 +62,15 @@ export class RegistroComponent {
   }
 
   submit() {
-    window.alert(`Hola ${this.form.value.name}, te has registrado correctamente!`);
+    window.alert(
+      `Hola ${this.form.value.name}, te has registrado correctamente!`
+    );
+    localStorage.getItem( 'aaaaaa');
 
-    this._auth.register(this.form.value.email, this.form.value.pass)
-      .then(result => {        
-        this.router.navigate(['/', 'login']).then(() => {
-          window.location.reload();
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    // this.localStorageService.addItem('form', this.form.value);
+    this.service.agregarUsuarios(this.form.value).subscribe({
+      next: (e) => {
+        this.router.navigate(['/', 'login'])       
+      },
+    });
   }
 }

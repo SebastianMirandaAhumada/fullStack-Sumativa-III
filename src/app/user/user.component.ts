@@ -67,7 +67,7 @@ export class UserComponent {
    * Obtiene el formulario almacenado en localStorage y establece los valores en el formulario actual.
    */
   getform() {
-    const user = localStorage.getItem('form');
+    const user = localStorage.getItem('usuario');
     const form = user ? JSON.parse(user) : null;
 
     this.form.setValue({
@@ -110,7 +110,7 @@ export class UserComponent {
     this.router.navigate(['/', 'user']).then(() => {
       window.location.reload();
     });
-    this.localStorageService.addItem('form', this.form.value);
+    this.localStorageService.addItem('usuario', this.form.value);
     localStorage.setItem('token', 'aaaaa');
   }
 
@@ -118,10 +118,11 @@ export class UserComponent {
    * @description
    * Cierra la sesión del usuario, eliminando el token de autenticación y redirigiendo a la página principal.
    */
+  
   cerrarSesion() {
-    this.auth
-      .logout()
-      .then((e) => console.log(e))
-      .catch((e) => console.log(e));
+    localStorage.removeItem('token');
+    this.router.navigate(['/', 'home']).then(() => {
+      window.location.reload();
+    });
   }
 }

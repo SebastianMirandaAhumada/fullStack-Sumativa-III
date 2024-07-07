@@ -8,29 +8,14 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
+import { collectionData, Firestore } from '@angular/fire/firestore';
+import { collection } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConsumirBD {
-  token = '2b3b7a34-ef56-4e29-b4be-ecccda10a576';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer 2b3b7a34-ef56-4e29-b4be-ecccda10a576',
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache',
-    }),
-  };
-  private jsonUrl =
-    'https://firebasestorage.googleapis.com/v0/b/full-stack-ii-b5c40.appspot.com/o/juegos.json?alt=media&token=2b3b7a34-ef56-4e29-b4be-ecccda10a576';
-
-  constructor(private auth: Auth) {}
-
-  // getJuegos(): Observable<any> {
-  //   return this.http.get(this.jsonUrl);
-  // }
+  constructor(private auth: Auth, private firestore: Firestore) {}
 
   register(email, password) {
     return createUserWithEmailAndPassword(this.auth, email, password);
@@ -40,5 +25,10 @@ export class ConsumirBD {
   }
   logout() {
     return signOut(this.auth);
+  }
+
+  getJuegos(): Observable<DataJuegosInteface[]> {
+    const dataJuegos = collection(this.firestore, 'juegos.json');
+    return collectionData(dataJuegos,{idField:'id'}) as Observable<DataJuegosInteface[]>
   }
 }

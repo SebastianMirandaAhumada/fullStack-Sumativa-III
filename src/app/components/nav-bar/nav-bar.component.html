@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg bg-black sticky-top text-white">
     <div class="container-fluid">
       <a class="navbar-brand" href="./index.html">Tienda Juegos</a>
-   
+      <span *ngIf="isAuthenticated">Hola!</span>
       <button
         class="navbar-toggler"
         type="button"
@@ -29,13 +29,13 @@
             <a
               class="nav-link"
               [routerLink]="['/login']"
-             
+              *ngIf="!isAuthenticated"
               >Inicio Sesion</a
             >
           </li>
 
           <li class="nav-item" id="profileLink">
-            <a class="nav-link" [routerLink]="['/user']" 
+            <a class="nav-link" [routerLink]="['/user']" *ngIf="isAuthenticated"
               >Mi Cuenta</a
             >
           </li>
@@ -43,7 +43,7 @@
             <a
               class="nav-link"
               [routerLink]="['/admin']"
-              
+              *ngIf="isAuthenticated"
               >Administrador</a
             >
           </li>
@@ -51,7 +51,7 @@
             <a
               class="nav-link"
               [routerLink]="['/registro']"
-              
+              *ngIf="!isAuthenticated"
               >Registro</a
             >
           </li>

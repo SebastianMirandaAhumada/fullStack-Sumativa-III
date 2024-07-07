@@ -17,13 +17,13 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () =>
       import('./admin/admin.component').then((m) => m.AdminComponent),
-    ...canActivate(() => redirectUnauthorizedTo(['/registro'])),
+    
   },
   {
     path: 'user',
     loadComponent: () =>
       import('./user/user.component').then((m) => m.UserComponent),
-    ...canActivate(() => redirectUnauthorizedTo(['/registro'])),
+    
   },
   { path: 'registro', component: RegistroComponent },
   { path: 'login', component: LoginComponent },
