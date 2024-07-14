@@ -10,7 +10,7 @@ import {
 import { LocalStorageService } from '../../../service/localStorage.service';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { ConsumirBD } from '../service/consumir-bd.service';
+
 
 /**
  * @description
@@ -35,7 +35,7 @@ export class UserComponent {
   constructor(
     private localStorageService: LocalStorageService,
     private router: Router,
-    private auth: ConsumirBD
+  
   ) {
     this.getform();
   }
